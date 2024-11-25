@@ -14,6 +14,15 @@ import (
 	"strings"
 )
 
+var (
+	batchType string // batch query, can be ip/domain
+)
+
+const (
+	IPMax     = 100 // maximum number of splicing ips
+	DomainMax = 50  // maximum number of splicing domains
+)
+
 // dump subcommand
 var dumpCmd = &cli.Command{
 	Name:                   "dump",
@@ -83,8 +92,39 @@ var dumpCmd = &cli.Command{
 			Usage:       "the amount of data contained in each batch",
 			Destination: &batchSize,
 		},
+		&cli.StringFlag{
+			Name:        "batchType",
+			Aliases:     []string{"bt"},
+			Value:       "",
+			Usage:       "batch query, can be ip/domain",
+			Destination: &batchType,
+		},
 	},
 	Action: DumpAction,
+}
+
+func constructQuery(queryType string, queries []string) string {
+	var queryBuilder strings.Builder
+	for i, query := range queries {
+		if i > 0 {
+			queryBuilder.WriteString(" || ")
+		}
+		queryBuilder.WriteString(fmt.Sprintf("%s=%s", queryType, query))
+	}
+	return queryBuilder.String()
+}
+
+func batchProcess(queries []string, batchSize int, queryType string) []string {
+	var batchedQueries []string
+	for i := 0; i < len(queries); i += batchSize {
+		end := i + batchSize
+		if end > len(queries) {
+			end = len(queries)
+		}
+		batchedQuery := constructQuery(queryType, queries[i:end])
+		batchedQueries = append(batchedQueries, batchedQuery)
+	}
+	return batchedQueries
 }
 
 // DumpAction search action
@@ -108,6 +148,9 @@ func DumpAction(ctx *cli.Context) error {
 
 		// 逐行读取并打印
 		for scanner.Scan() {
+			if scanner.Text() == "" {
+				continue
+			}
 			queries = append(queries, scanner.Text())
 		}
 
@@ -123,6 +166,17 @@ func DumpAction(ctx *cli.Context) error {
 	fields := strings.Split(fieldString, ",")
 	if len(fields) == 0 {
 		return errors.New("fofa fields cannot be empty")
+	}
+
+	// batchType检验
+	if batchType != "" && batchType != "ip" && batchType != "domain" {
+		return errors.New("batchType param has to be one of ip/domain")
+	}
+
+	if batchType == "ip" {
+		queries = batchProcess(queries, IPMax, "ip")
+	} else if batchType == "domain" {
+		queries = batchProcess(queries, DomainMax, "domain")
 	}
 
 	// gen output

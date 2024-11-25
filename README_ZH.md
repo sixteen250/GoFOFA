@@ -293,18 +293,37 @@ $ fofa count port=80
 ### 查询实用功能
 #### 批量搜索
 
-通过`search`模块的`--batchType`参数开启批量搜索，配合`--template`参数使用:
+通过`dump`模块的`--batchType`参数开启批量搜索，如果不使用次参数，应当输入正常的fofa语句:
 
 ```shell
 $ cat ip.txt
 106.75.95.206
 123.58.224.8
-$ fofa search -i ip.txt --batchType ip --template {}
-2024/11/22 11:26:09 not set fofa query, now in pipeline mode....
-2024/11/22 11:26:09 query fofa of: ip=106.75.95.206 || ip=123.58.224.8
+$ fofa dump -i ip.txt --batchType ip
+2024/11/25 14:51:10 dump data of query: ip=106.75.95.206 || ip=123.58.224.8
 123.58.224.8,40544
 123.58.224.8,31497
 106.75.95.206,80
+......
+```
+
+或者更简洁一些:
+
+```shell
+$ fofa dump -i ip.txt -bt ip
+2024/11/25 14:51:10 dump data of query: ip=106.75.95.206 || ip=123.58.224.8
+123.58.224.8,40544
+123.58.224.8,31497
+106.75.95.206,80
+......
+```
+
+也可以输出到文件中，结果会打印输出进度:
+
+```shell
+$ fofa dump -i ip.txt -bt ip -o dump.csv
+2024/11/25 14:51:10 dump data of query: ip=106.75.95.206 || ip=123.58.224.8
+2024/11/25 14:52:03 size: 188/188, 100.00%
 ......
 ```
 

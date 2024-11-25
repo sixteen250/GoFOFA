@@ -38,12 +38,6 @@ var (
 	filter        string // filter data by rules
 	dedupHost     bool   // deduplicate by host
 	headline      bool   // add headline for csv
-	batchType     string // batch query, can be ip/domain
-)
-
-const (
-	IPMax     = 100 // maximum number of splicing ips
-	DomainMax = 50  // maximum number of splicing domains
 )
 
 // search subcommand
@@ -162,12 +156,6 @@ var searchCmd = &cli.Command{
 			Usage:       "add headline for csv",
 			Destination: &headline,
 		},
-		&cli.StringFlag{
-			Name:        "batchType",
-			Value:       "",
-			Usage:       "batch query, can be ip/domain",
-			Destination: &batchType,
-		},
 	},
 	Action: SearchAction,
 }
@@ -194,7 +182,7 @@ func hasBodyField(fields []string) bool {
 	return hashField(fields, "body")
 }
 
-func pipelineProcess(writeQuery func(query string) error, in io.Reader, batchType string) {
+func pipelineProcess(writeQuery func(query string) error, in io.Reader) {
 	// 并发模式
 	wg := sync.WaitGroup{}
 	queries := make(chan string, workers)
@@ -217,29 +205,10 @@ func pipelineProcess(writeQuery func(query string) error, in io.Reader, batchTyp
 	}
 
 	scanner := bufio.NewScanner(in)
-	num := 0
-	if batchType != "" {
-		var lines []string
-		for scanner.Scan() {
-			lines = append(lines, scanner.Text())
-			num++
-			if (batchType == "ip" && num >= IPMax) || (batchType == "domain" && num >= DomainMax) {
-				wg.Add(1)
-				queries <- constructQuery(batchType, lines)
-				num = 0
-				lines = nil
-			}
-		}
-		if len(lines) > 0 {
-			wg.Add(1)
-			queries <- constructQuery(batchType, lines)
-		}
-	} else {
-		for scanner.Scan() {
-			line := scanner.Text()
-			wg.Add(1)
-			queries <- line
-		}
+	for scanner.Scan() { // internally, it advances token based on sperator
+		line := scanner.Text()
+		wg.Add(1)
+		queries <- line
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -247,17 +216,6 @@ func pipelineProcess(writeQuery func(query string) error, in io.Reader, batchTyp
 	}
 
 	wg.Wait()
-}
-
-func constructQuery(queryType string, queries []string) string {
-	var queryBuilder strings.Builder
-	for i, query := range queries {
-		if i > 0 {
-			queryBuilder.WriteString(" || ")
-		}
-		queryBuilder.WriteString(fmt.Sprintf("%s=%s", queryType, query))
-	}
-	return queryBuilder.String()
 }
 
 // SearchAction search action
@@ -296,11 +254,6 @@ func SearchAction(ctx *cli.Context) error {
 	// isActive不能为0
 	if checkActive == 0 {
 		return errors.New("isActive param cannot be zero")
-	}
-
-	// batchType检验
-	if batchType != "" && batchType != "ip" && batchType != "domain" {
-		return errors.New("batchType param has to be one of ip/domain")
 	}
 
 	// gen output
@@ -391,7 +344,7 @@ func SearchAction(ctx *cli.Context) error {
 		} else {
 			inf = os.Stdin
 		}
-		pipelineProcess(writeQuery, inf, batchType)
+		pipelineProcess(writeQuery, inf)
 	}
 
 	return nil

@@ -1,8 +1,8 @@
-## v0.2.25 add jsRender mode and batchType in search mode
+## v0.2.25 add jsRender mode and batchType in dump mode
 
 -   jsRender use as: ```fofa jsRender -u http://baidu.com -t title [-o jsRender.csv]```
 -   jsRender of pipline use as: ```fofa search -f link -s 3 port=80 | fofa jsRender -t title```
--   search of batchType use as: ```fofa search -i ip.txt --batchType ip --template {}```
+-   dump of batchType use as: ```fofa dump -i ip.txt --batchType ip```
 
 ## v0.2.24 add category mode
 
