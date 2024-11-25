@@ -21,7 +21,7 @@ GoFOFA是一款使用Go语言编写的命令行FOFA查询工具，他除了具�
 - [基础查询](#基础查询)
 
 - [查询实用功能](#查询实用功能)
-	- [批量搜索（支持txt上传进行批量查询，支持从管道输入查询）](#批量搜索)
+	- [批量搜索（支持txt上传进行批量查询）](#批量搜索)
 	- [指定URL拼接](#URL拼接)
 	- [随机从FOFA生成数据](#随机从FOFA生成数据)
 	- [证书拓线获取域名](#证书拓线查询域名)
@@ -293,7 +293,7 @@ $ fofa count port=80
 ### 查询实用功能
 #### 批量搜索
 
-通过`dump`模块的`--batchType`参数开启批量搜索，如果不使用次参数，应当输入正常的fofa语句:
+通过`dump`模块的`--batchType`参数开启批量搜索，如果不使用此参数，应当输入正常的fofa语句，`--batchSize`可以用来设置每组下载数量，默认为1000，`--size`为总共拉去数量，默认为-1代表获取全部:
 
 ```shell
 $ cat ip.txt
@@ -440,10 +440,10 @@ $ fofa icon http://www.baidu.com
 
 #### 大数据量下载
 
-大批量数据下载使用，使用`-batchSize`设置下载数量，一键完成数据下载并存储到指定文件:
+大批量数据下载使用，使用`--batchSize`设置每组下载数量，一键完成数据下载并存储到指定文件:
 
 ```shell
-$ fofa dump --format json -fixUrl -outFile a.json -batchSize 10000 'title=phpinfo'
+$ fofa dump --format json -fixUrl -outFile a.json -batchSize 500 'title=phpinfo'
 ```
 
 通过fofa语句文件，来下载并存储大数据（每条数据一行）:
