@@ -37,13 +37,13 @@
 
 - 下载gofofa:
 
-```
+```shell
 $ go install github.com/FofaInfo/GoFOFA/cmd/fofa@latest
 ```
 
 - 显示如下表示安装成功:
 
-```
+```shell
 $ fofa
 NAME:
    fofa - fofa client on Go v0.2.26, commit none, built at unknown
@@ -84,8 +84,8 @@ GLOBAL OPTIONS:
 
 - 配置环境变量:
 
-```
-$ export FOFA_CLIENT_URL='https://fofa.info/?key=your_key'
+```shell
+$ export FOFA_KEY='your_key'
 ```
 
 
@@ -93,7 +93,7 @@ $ export FOFA_CLIENT_URL='https://fofa.info/?key=your_key'
 
 可以将下载的 GoFOFA 压缩包解压放在 `/usr/local/bin/` 目录下，这样的好处是在终端任何一个位置都可以使用这个命令。
 
-```text
+```shell
 tar -zxvf ~/Downloads/fofa_0.2.26_darwin_amd64.tar.gz -C /usr/local/bin/
 ```
 注意，如果提示权限不足，请前置添加`sudo`进行执行，请注意下载版本的文件名修改。
@@ -112,7 +112,7 @@ tar -zxvf ~/Downloads/fofa_0.2.26_darwin_amd64.tar.gz -C /usr/local/bin/
 调用命令为`search`, 无命令情况下，默认为查询模式。
 
 
-```
+```shell
 fofa search 'port=80 && protocol=ftp'
 2024/08/23 11:52:00 query fofa of: port=80 && protocol=ftp
 139.196.102.155,80
@@ -127,7 +127,7 @@ fofa search 'port=80 && protocol=ftp'
 **返回字段选择：** 使用`-fields`来选择输出的字段，会根据选定的字段进行返回，下面的示例选择了`host,ip,port,protocol,lastupdatetime`字段。
 该命令支持简写模式，`-fields`和 `-f` 都可以完成。
 
-```
+```shell
 $ fofa search -fields host,ip,port,protocol,lastupdatetime 'port=6379'
 2024/08/23 12:09:08 query fofa of: port=6379
 168.119.197.62:6379,168.119.197.62,6379,redis,2024-08-23 12:00:00
@@ -141,7 +141,7 @@ $ fofa search -fields host,ip,port,protocol,lastupdatetime 'port=6379'
 **返回结果量：** 使用`-size`来选择单词输出的数据返回量， 不选择默认大小是100。
 该命令支持简写模式，`-size` 和 `-s` 都可以完成。
 
-```
+```shell
 $ fofa search -size 5 'port=6379'
 2024/08/23 14:07:18 query fofa of: port=6379
 47.99.89.216,6379
@@ -153,7 +153,7 @@ $ fofa search -size 5 'port=6379'
 
 **输出格式：** 如果需要输出不同的数据格式，可以通过`-format`来设置，默认是`csv`格式，还支持`json`、`xml`和`txt`格式。
 
-```
+```shell
 $ fofa search -format json 'port=6379'
 2024/08/23 14:05:49 query fofa of: port=6379
 {"ip":"39.101.36.243","port":"6379"}
@@ -168,13 +168,13 @@ $ fofa search -format json 'port=6379'
 **数据导出：** 使用`-outFile`可以将结果输出到指定文件中，若不设置次参数则默认输出在命令行中。
 该命令支持简写模式，`-outFile` 和 `-o` 都可以完成。
 
-```
+```shell
 $ fofa search -outFile a.txt 'port=6379'
 ```
 
 **个人信息查询**：通过`account`可以获取账户信息。
 
-```
+```shell
 $ fofa account
 {
   "error": false,
@@ -189,7 +189,7 @@ $ fofa account
 
 **FOFA查询结果数量:** 可以通过`count`模块查看数据量。
 
-```
+```shell
 $ fofa count port=80
 587055296
 ```
@@ -205,7 +205,7 @@ ip批量搜索会将文件中的ip以100为一组生成批量搜索的语句，d
 
 批量类型命令支持简写模式，`-batchType` 和 `-bt` 都可以完成。
 
-```
+```shell
 $ cat ip.txt
 106.75.95.206
 123.58.224.8
@@ -219,7 +219,7 @@ $ fofa dump -i ip.txt --batchType ip
 
 一般都会输出到文件中，输出结果会打印输出进度:
 
-```
+```shell
 $ fofa dump -i ip.txt -bt ip -o dump.csv
 2024/11/25 14:51:10 dump data of query: ip=106.75.95.206 || ip=123.58.224.8
 2024/11/25 14:52:03 size: 188/188, 100.00%
@@ -232,7 +232,7 @@ $ fofa dump -i ip.txt -bt ip -o dump.csv
 
 `-size`为每组需要拉取的总数据量，默认为-1代表获取所有数据。
 
-```
+```shell
 $ fofa dump -i ip.txt -bt ip -o dump.csv
 2024/11/25 17:39:05 dump data of query: ip=112.25.151.122 || ... || ip=58.213.160.221
 2024/11/25 17:39:06 size: 115/115, 100.00%
@@ -244,7 +244,7 @@ $ fofa dump -i ip.txt -bt ip -o dump.csv
 
 1. 如果你想获取完整的url拼接，可以使用`fixUrl`参数:
 
-```
+```shell
 $ fofa --size 2 --fields "host" title=Gitblit
 2024/08/23 14:23:02 query fofa of: title=Gitblit
 pmsningbo.veritrans.cn:20202
@@ -346,13 +346,13 @@ $ fofa icon http://www.baidu.com
 
 大批量数据下载使用，使用`--batchSize`设置每组下载数量，一键完成数据下载并存储到指定文件:
 
-```
+```shell
 $ fofa dump --format json -fixUrl -outFile a.json -batchSize 500 'title=phpinfo'
 ```
 
 通过fofa语句文件，来下载并存储大数据（每条数据一行）:
 
-```
+```shell
 cat queries.txt
 port=13344
 port=23455
@@ -414,7 +414,7 @@ UpdateTime:      2022-05-30 17:00:00
 
 IP去重命令是 `-uniqByIP` 来去除相同的ip。
 
-```
+```shell
 fofa search -uniqByIP -s 30 port=80
 2024/12/06 17:03:09 query fofa of: port=80
 161.156.173.134,80
@@ -431,7 +431,7 @@ fofa search -uniqByIP -s 30 port=80
 
 1. 第一种是边查询边进行去重操作，即从FOFA拉下来的数据就是去重完成的。```-dedupHost```，在fofa中subdomain代表网页数据，service代表协议数据，如果host相同，优先保留subdomain数据:
 
-```
+```shell
 $ fofa search -s 3 -f host,type --dedupHost "ip=106.75.95.206"
 2024/08/28 19:52:30 query fofa of: ip=106.75.95.206
 https://106.75.95.206,subdomain
@@ -453,7 +453,7 @@ $ fofa dedup -output data.csv -dedup ip,host,domain -output dedup.csv
 
 如果你想要减少泛域名数量，可以使用```--deWildcard```设置保留泛域名数量，```-f```可以支持其他字段选用link做为演示:
 
-```
+```shell
 $ fofa search -s 3 -f link --deWildcard 1 domain=huashunxinan.net
 2024/08/27 17:26:42 query fofa of: domain=huashunxinan.net
 http://h8huumr2zdmwgy5.huashunxinan.net
@@ -469,7 +469,7 @@ http://huashunxinan.net
 
 可以使用```--checkActive 3```，`3`是超时重复次数（使用这个参数之后也会重新获取status_code数据）:
 
-```
+```shell
 $ fofa search -s 3 --checkActive 3 --format=json port=80
 2024/08/26 18:53:33 query fofa of: port=80
 {"ip":"54.78.179.223","isActive":"false","port":"80"}
@@ -501,7 +501,7 @@ asdsadsasdas.com,false
 
 还支持对管道中的url进行探测（管道中的数据需为每行一条url）:
 
-```
+```shell
 $ fofa search -f link -s 3 port=80 | fofa active
 2024/08/23 15:50:11 query fofa of: port=80
 http://og823.hb-yj.com,true

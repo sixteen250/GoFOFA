@@ -14,18 +14,18 @@ For any questions about GoFOFA, feel free to join our FOFA community via [WeChat
 ## Installation
 Run the following command in the terminal to install the latest version of GoFOFA:
 
-```
+```shell
 go install github.com/FofaInfo/GoFOFA/cmd/fofa@latest
 ```
 Configure the environment variable with your FOFA API key:
 
-```
+```shell
 export FOFA_KEY='your_key'
 ```
 Execute the test command `fofa search -s 1 ip=1.1.1.1`. If results are returned, the installation and configuration are successful.
 
 Output example:
-```
+```shell
 fofa search -s 1 ip=1.1.1.1
 query fofa of: ip=1.1.1.1
 1.1.1.1,8880
@@ -50,7 +50,7 @@ Example case:
 3. Retrieved fields include `ip`, `port`, `host`, `link`, `title`, and `domain`;
 4. Automatically saved as a `data.csv` file.
 
-```
+```shell
 fofa dump -i ip.txt -bt ip -bs 50000 -f ip,port,host,protocol,lastupdatetime -o data.csv
 ```
 
@@ -65,7 +65,7 @@ Example case:
 2. Selecting `json` format for output;
 3. Setting 3 retries for timeouts.
 
-```
+```shell
 fofa --checkActive 3 -s 100 --format=json port=80 && type=subdomain
 ```
 
@@ -85,7 +85,7 @@ Example case:
 2. Rendering and recognizing URLs from the pipeline;
 3. Adding the newly extracted `title` field.
 
-```
+```shell
 fofa jsRender -tags title --format=json -i link.txt -o data.txt
 ```
 
@@ -97,7 +97,7 @@ Users can set filtering rules in the `config.yaml` file beforehand. Using a buil
 
 Usage example:
 
-```
+```shell
 fofa category -input input.csv [-o category.csv]
 ```
 

@@ -15,18 +15,18 @@ GoFOFA是一款使用Go语言编写的命令行FOFA查询工具，他除了具�
 ## 安装
 在终端执行下列命令安装最新版本的GoFOFA
 
-```
+```shell
 go install github.com/FofaInfo/GoFOFA/cmd/fofa@latest
 ```
 通过配置环境变量，添加自己的FOFA API key
 
-```
+```shell
 export FOFA_KEY='your_key'
 ```
 执行测试命令`fofa search -s 1 ip=1.1.1.1`，如果返回结果，则证明安装和配置成功。
 
 返回内容
-```
+```shell
 fofa search -s 1 ip=1.1.1.1
 query fofa of: ip=1.1.1.1
 1.1.1.1,8880
@@ -54,7 +54,7 @@ GoFOFA拥有非常丰富的功能，查看功能使用手册和安装指南[请�
 4. 自动保存为一个data.csv格式的文件
 
 
-```
+```shell
 fofa dump -i ip.txt -bt ip -bs 50000 -f ip,port,host,protocol,lastupdatetime -o data.csv
 ```
 
@@ -69,7 +69,7 @@ fofa dump -i ip.txt -bt ip -bs 50000 -f ip,port,host,protocol,lastupdatetime -o 
 2. 格式选择为json格式输出；
 3. 超时重复设置为3次。
 
-```
+```shell
 fofa --checkActive 3 -s 100 --format=json port=80 && type=subdomain
 ```
 ### JS渲染模块
@@ -86,7 +86,7 @@ JS渲染模块顾名思义可以针对获取的数据中的URL字段进行JS渲�
 2. 从管道中获取到的url进行渲染识别；
 3. 并标记上新获取的title字段。
 
-```
+```shell
 fofa jsRender -tags title --format=json -i link.txt -o data.txt
 ```
 
@@ -98,7 +98,7 @@ fofa jsRender -tags title --format=json -i link.txt -o data.txt
 
 调取方式：
 
-```
+```shell
 fofa category -input input.csv [-o category.csv]
 ```
 
@@ -109,27 +109,26 @@ fofa category -input input.csv [-o category.csv]
 3. sheet3：非http/https协议的资产；
 4. sheet4: category字段包含以下分类“路由器”、“视频监控”、“网络存储”、“防火墙”标签的资产；
 
-```
+```yaml
 categories:  
-	- name: "sheet1"    
-	  filters:    
-		- "CONTAIN(title, '后台') && CONTAIN(title, '登录')"
-		- "CONTAIN(title, '管理') && CONTAIN(title, '系统')"
-
-  	- name: "sheet2"    
-	  filters:      
-		- "CONTAIN(title, 'nginx') && CONTAIN(title, 'tomcat')"
- 		- "CONTAIN(title, 'IIS') && CONTAIN(title, 'Welcome to OpenRestry')"
-
-	- name: "sheet3"
-	  filters:
-		- "protocol!='http' || protocol!=''https"
-
-	- name: "sheet4"
-	  filters:
-		- "CONTAIN(product_category, '路由器') && CONTAIN(product_category, '视频监控')"
- 		- "CONTAIN(product_category, '网络存储') && CONTAIN(product_category, '防火墙')"
-
+  - name: "sheet1"    
+    filters:    
+       - "CONTAIN(title, '后台') && CONTAIN(title, '登录')"
+       - "CONTAIN(title, '管理') && CONTAIN(title, '系统')"
+    
+  - name: "sheet2"    
+    filters:      
+      - "CONTAIN(title, 'nginx') && CONTAIN(title, 'tomcat')"
+      - "CONTAIN(title, 'IIS') && CONTAIN(title, 'Welcome to OpenRestry')"
+    
+  - name: "sheet3"
+    filters:
+      - "protocol!='http' || protocol!=''https"
+    
+  - name: "sheet4"
+    filters:
+      - "CONTAIN(product_category, '路由器') && CONTAIN(product_category, '视频监控')"
+      - "CONTAIN(product_category, '网络存储') && CONTAIN(product_category, '防火墙')"
 ```
 
 

@@ -85,7 +85,7 @@ GLOBAL OPTIONS:
 - Configure environment variables:
 
 ```shell
-$ export FOFA_CLIENT_URL='https://fofa.info/?key=your_key'
+$ export FOFA_KEY='your_key'
 ```
 
 #### MacOS/Linux Version Download
