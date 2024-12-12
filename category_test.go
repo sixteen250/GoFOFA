@@ -41,7 +41,7 @@ func TestCategory(t *testing.T) {
 	assert.Nil(t, err)
 	defer os.Remove(errYAMLFile.Name())
 
-	errYAMLContent := "categories:\n  - name: \"hard\"\n    filters:\n      - \"CONTAIN(category, '数据证书')\"\n\n  - name: \"invalid|soft\"\n    filters:\n      - \"CONTAIN(category, '其他支撑系统')\"\n\n  - name: \"buss\"\n    filters:\n      - \"CONTAIN(category, '电子邮件系统')\"\n      - \"CONTAIN(category, '其他企业应用')\"\n"
+	errYAMLContent := "categories:\n  - name: \"hard\"\n    filters:\n      - \"CONTAIN(category, '数据证书')\"\n\n  - name: \"~/golang-server.log\"\n    filters:\n      - \"CONTAIN(category, '其他支撑系统')\"\n\n  - name: \"buss\"\n    filters:\n      - \"CONTAIN(category, '电子邮件系统')\"\n      - \"CONTAIN(category, '其他企业应用')\"\n"
 	_, err = errYAMLFile.WriteString(errYAMLContent)
 	assert.Nil(t, err)
 	errYAMLFile.Close()
@@ -55,7 +55,8 @@ func TestCategory(t *testing.T) {
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "error opening CSV file")
 
-	_, err = Category(errYAMLFile.Name(), tmpCSVFile.Name(), CategoryOptions{})
+	s, err := Category(errYAMLFile.Name(), tmpCSVFile.Name(), CategoryOptions{})
+	fmt.Println(err, s)
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "error creating output file")
 
