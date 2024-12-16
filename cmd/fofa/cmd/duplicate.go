@@ -79,46 +79,48 @@ func writeCSV(filePath string, records [][]string) error {
 	return nil
 }
 
-func deduplicate(records [][]string, fieldName string) ([][]string, error) {
-	headers := records[0]
-	var index int
-	found := false
+// indexOf 查找字段在表头中的索引
+func indexOf(headers []string, field string) int {
 	for i, header := range headers {
-		if header == fieldName {
-			index = i
-			found = true
-			break
+		if header == field {
+			return i
 		}
 	}
-	if !found {
-		return nil, fmt.Errorf("field %s not exist", fieldName)
-	}
-
-	seen := make(map[string]bool)
-	var uniqueRecords [][]string
-	uniqueRecords = append(uniqueRecords, headers)
-
-	for _, record := range records[1:] {
-		key := record[index]
-		if !seen[key] {
-			uniqueRecords = append(uniqueRecords, record)
-			seen[key] = true
-		}
-	}
-	return uniqueRecords, nil
+	return -1
 }
 
 func deduplicates(records [][]string, fields []string) ([][]string, error) {
-	var uniqueRecords [][]string
-	for _, field := range fields {
-		uniq, err := deduplicate(records, field)
-		if err != nil {
-			return nil, errors.New("deduplicate failed: " + err.Error())
-		}
-		uniqueRecords = append(uniqueRecords, uniq...)
+	if len(records) < 2 {
+		return nil, errors.New("deduplicate failed: CSV file is empty")
 	}
 
-	return uniqueRecords, nil
+	// 获取字段索引
+	fieldIndexes := make([]int, 0, len(fields))
+	for _, field := range fields {
+		index := indexOf(fields, field)
+		if index == -1 {
+			return nil, fmt.Errorf("field '%s' not found in headers", field)
+		}
+		fieldIndexes = append(fieldIndexes, index)
+	}
+
+	// 去重逻辑
+	seen := make(map[string]bool)
+	uniqueRows := [][]string{fields}
+
+	for _, row := range records[1:] {
+		keyParts := make([]string, len(fieldIndexes))
+		for i, idx := range fieldIndexes {
+			keyParts[i] = row[idx]
+		}
+		key := strings.Join(keyParts, "|")
+		if !seen[key] {
+			seen[key] = true
+			uniqueRows = append(uniqueRows, row)
+		}
+	}
+
+	return uniqueRows, nil
 }
 
 func deduplicateAction(ctx *cli.Context) error {

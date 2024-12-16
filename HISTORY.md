@@ -1,3 +1,7 @@
+## v0.2.27 add multiple fields to remove duplicates in dedup mode
+
+-   dedup of multiple fields to remove duplicates use as: ```fofa dedup -d host,port,ip,protocol -i input.csv -o output.csv```
+
 ## v0.2.26 update jsRender mode and headline in dump mode
 
 -   update jsRender deadline
