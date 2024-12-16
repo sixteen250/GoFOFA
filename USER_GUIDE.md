@@ -697,7 +697,7 @@ $ fofa --version
 
 | Parameter    | Abbreviation | Default Value | Description                                              |
 |--------------|--------------|---------------|----------------------------------------------------------|
-| fields       | f            | title,country | FOFA fields to retrieve. [Learn More](https://fofa.info/vip) |
+| fields       | f            | title,country | FOFA fields to retrieve. [Learn More](https://fofa.info/api) |
 | size         | s            | 5             | Number of queries. `-1` for infinite queries             |
 | help         | h            | false         | Displays usage instructions                              |
 
@@ -705,7 +705,7 @@ $ fofa --version
 
 | Parameter    | Abbreviation | Default Value                        | Description                                              |
 |--------------|--------------|--------------------------------------|----------------------------------------------------------|
-| fields       | f            | ip,port,host,header,title,server,lastupdatetime | FOFA fields to retrieve. [Learn More](https://fofa.info/vip) |
+| fields       | f            | ip,port,host,header,title,server,lastupdatetime | FOFA fields to retrieve. [Learn More](https://fofa.info/api) |
 | format       |              | json                                | Output format: csv/json/xml                              |
 | size         | s            | 1                                   | Number of queries. `-1` for infinite queries             |
 | sleep        |              | 1000                                | Interval between queries in milliseconds                |

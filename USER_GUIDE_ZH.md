@@ -584,7 +584,7 @@ $ fofa --version
 
 | 参数        | 参数简写 | 默认值  | 简介                                              |
 | ----------- | -------- | ------- | ------------------------------------------------- |
-| fields      | f        | ip,port | FOFA返回的字段选择，[了解更多](https://fofa.info/vip) |                             
+| fields      | f        | ip,port | FOFA返回的字段选择，[了解更多](https://fofa.info/api) |                             
 | format      |          | csv     | 输出格式，可以为csv/json/xml                      |
 | outFile     | o        |         | 输出文件，如果不设置则终端打印                    |
 | size        | s        | 100     | 查询数量，最大为10000，受deductMode参数限制       |
@@ -608,7 +608,7 @@ $ fofa --version
 
 | 参数      | 参数简写 | 默认值  | 简介                                                  |
 | --------- | -------- | ------- | ----------------------------------------------------- |
-| fields    | f        | ip,port | FOFA返回的字段选择，[了解更多](https://fofa.info/vip) |
+| fields    | f        | ip,port | FOFA返回的字段选择，[了解更多](https://fofa.info/api) |
 | format    |          | csv     | 输出格式，可以为csv/json/xml                          |
 | outFile   | o        |         | 输出文件，如果不设置则终端打印                        |
 | inFile    | i        |         | 输入文件，如果不设置则读取管道输入                    |
@@ -691,7 +691,7 @@ $ fofa --version
 
 | 参数   | 参数简写 | 默认值        | 简介                                                  |
 | ------ | -------- | ------------- | ----------------------------------------------------- |
-| fields | f        | title,country | FOFA返回的字段选择，[了解更多](https://fofa.info/vip) |
+| fields | f        | title,country | FOFA返回的字段选择，[了解更多](https://fofa.info/api) |
 | size   | s        | 5             | 查询次数，-1表示永远不停                              |
 | help   | h        | false         | 使用方法                                              |
 
@@ -699,7 +699,7 @@ $ fofa --version
 
 | 参数      | 参数简写 | 默认值                                          | 简介                                                  |
 | --------- | -------- | ----------------------------------------------- | ----------------------------------------------------- |
-| fields    | f        | ip,port,host,header,title,server,lastupdatetime | FOFA返回的字段选择，[了解更多](https://fofa.info/vip) |
+| fields    | f        | ip,port,host,header,title,server,lastupdatetime | FOFA返回的字段选择，[了解更多](https://fofa.info/api) |
 | format    |          | json                                            | 输出格式，可以为csv/json/xml                          |
 | size      | s        | 1                                               | 查询次数，-1表示永远不停                              |
 | sleep     |          | 1000                                            | 获取间隔，单位ms                                      |
