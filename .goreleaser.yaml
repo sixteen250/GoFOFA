@@ -22,7 +22,13 @@ builds:
       - darwin
     goarch:
       - amd64
+      - 386
       - arm64
+    ignore:
+      - goos: darwin
+        goarch: 386
+      - goos: windows
+        goarch: arm64
     asmflags:
       - -D mysymbol
       - all=-trimpath={{.Env.GOPATH}}
@@ -31,6 +37,10 @@ builds:
       - ./dontoptimizeme=-N
     ldflags:
       - "-s -w"
+      - "-X 'main.version={{.Version}}'"
+      - "-X 'main.commit={{.Commit}}'"
+      - "-X 'main.date={{.Date}}'"
+      - "-X 'main.builtBy={{.User}}'"
 checksum:
   name_template: 'checksums.txt'
 snapshot:
