@@ -159,7 +159,7 @@ func BrowserAction(ctx *cli.Context) error {
 	writeURL := func(u string) error {
 		log.Println("js render of:", u)
 		// do jsBrowser
-		b := gofofa.NewWorkerBrowser(u)
+		b := gofofa.NewWorkerBrowser(u, retry)
 		body, err := b.Run()
 		if err != nil {
 			return err

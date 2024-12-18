@@ -15,12 +15,14 @@ import (
 )
 
 type WorkerBrowser struct {
-	Url string
+	Url   string
+	Retry int
 }
 
-func NewWorkerBrowser(url string) *WorkerBrowser {
+func NewWorkerBrowser(url string, retry int) *WorkerBrowser {
 	return &WorkerBrowser{
-		Url: url,
+		Url:   url,
+		Retry: retry,
 	}
 }
 
@@ -106,11 +108,10 @@ func (wp *WorkerBrowser) findNodeText(n *html.Node, tag string) string {
 }
 
 func (wp *WorkerBrowser) renderScan(url string) (string, error) {
-	const maxRetries = 3
 	const retryDelay = 5 * time.Second
 	var lastErr error
 
-	for attempt := 1; attempt <= maxRetries; attempt++ {
+	for attempt := 1; attempt <= wp.Retry; attempt++ {
 		bodyHTML, err := func() (string, error) {
 			ctx, cancel := context.WithCancel(context.Background())
 			defer cancel()
