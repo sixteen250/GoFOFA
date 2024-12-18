@@ -29,6 +29,13 @@ var statsCmd = &cli.Command{
 			Usage:       "aggs size",
 			Destination: &size,
 		},
+		&cli.StringFlag{
+			Name:        "customFields",
+			Aliases:     []string{"cf"},
+			Value:       "",
+			Usage:       "use custom fields",
+			Destination: &customFields,
+		},
 	},
 	Action: statsAction,
 }
@@ -39,6 +46,13 @@ func statsAction(ctx *cli.Context) error {
 	query := ctx.Args().First()
 	if len(query) == 0 {
 		return errors.New("fofa query cannot be empty")
+	}
+	var err error
+	if customFields != "" {
+		fieldString, err = getCustomFields(customFields)
+		if err != nil {
+			return fmt.Errorf("get custom fields error, %v", err)
+		}
 	}
 	fields := strings.Split(fieldString, ",")
 	if len(fields) == 0 {

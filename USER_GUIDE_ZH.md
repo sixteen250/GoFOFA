@@ -45,41 +45,50 @@ $ go install github.com/FofaInfo/GoFOFA/cmd/fofa@latest
 
 ```shell
 $ fofa
-NAME:
-   fofa - fofa client on Go v0.2.26, commit none, built at unknown
+fofa - fofa client on Go v0.2.27, commit none, built at unknown
 
-USAGE:
-   fofa [global options] command [command options] [arguments...]
+   ██████╗  ██████╗ ███████╗ ██████╗ ███████╗ █████╗ 
+  ██╔════╝ ██╔═══██╗██╔════╝██╔═══██╗██╔════╝██╔══██╗
+  ██║  ███╗██║   ██║█████╗  ██║   ██║█████╗  ███████║
+  ██║   ██║██║   ██║██╔══╝  ██║   ██║██╔══╝  ██╔══██║
+  ╚██████╔╝╚██████╔╝██║     ╚██████╔╝██║     ██║  ██║
+   ╚═════╝  ╚═════╝ ╚═╝      ╚═════╝ ╚═╝     ╚═╝  ╚═╝
+                                           v0.2.27
+                   https://github.com/FofaInfo/GoFOFA
 
-VERSION:
-   v0.2.26
+Usage:
+  fofa [global options] command [command options] [arguments...]
 
-AUTHOR:
-   LubyRuffy <lubyruffy@gmail.com>
-   Y13ze <y13ze@outlook.com>
+Commands:
+  search    fofa host search
+  account   fofa account information
+  count     fofa query results count
+  stats     fofa stats
+  icon      fofa icon search
+  random    fofa random data generator
+  host      fofa host
+  dump      fofa dump data
+  domains   extend domains from a domain
+  active    website active
+  dedup     remove duplicate tool
+  category  classify data according to config
+  jsRender  website js render
+  help, h   Shows a list of commands or help for one command
 
-COMMANDS:
-   search   fofa host search
-   account  fofa account information
-   count    fofa query results count
-   stats    fofa stats
-   icon     fofa icon search
-   random   fofa random data generator
-   host     fofa host
-   dump     fofa dump data
-   domains  extend domains from a domain
-   active   website active
-   dedup    remove duplicate tool
-   category  classify data according to config
-   jsRender  website js render
-   help, h  Shows a list of commands or help for one command
+Global Options:
+  --fofaURL value, -u value  format: <url>/?email=&key=<key>&version=<v2> (default: "https://fofa.info/?email=&key=your_key&version=v1")
+  --verbose                  print more information (default: false)
+  --accountDebug             print account in error log (default: false)
+  --help, -h                 show help (default: false)
+  --version, -v              print the version (default: false)
 
-GLOBAL OPTIONS:
-   --fofaURL value, -u value  format: <url>/?email=&key=<key>&version=<v2> (default: "https://fofa.info/?key=your_key&version=v1")
-   --verbose                  print more information (default: false)
-   --accountDebug             print account in error log (default: false)
-   --help, -h                 show help (default: false)
-   --version, -v              print the version (default: false)
+Authors:
+  LubyRuffy <lubyruffy@gmail.com>
+  Y13ze <y13ze@outlook.com>
+
+Examples:
+  fofa search -s 1 "ip=1.1.1.1"
+  fofa --help
 ```
 
 - 配置环境变量:
@@ -129,6 +138,24 @@ fofa search 'port=80 && protocol=ftp'
 
 ```shell
 $ fofa search -fields host,ip,port,protocol,lastupdatetime 'port=6379'
+2024/08/23 12:09:08 query fofa of: port=6379
+168.119.197.62:6379,168.119.197.62,6379,redis,2024-08-23 12:00:00
+119.45.170.222:6379,119.45.170.222,6379,redis,2024-08-23 12:00:00
+112.126.87.29:6379,112.126.87.29,6379,unknown,2024-08-23 12:00:00
+121.43.116.245:6379,121.43.116.245,6379,unknown,2024-08-23 12:00:00
+......
+......
+```
+
+也可以选择自定义字段，需要在`config.yaml`文件中添加下面这样的配置，之后再使用`-customFields`来选择自定义字段。
+该命令支持简写模式，`-customFields`和 `-cf` 都可以完成。
+```shell
+custom_fields:
+  - name: custom
+    fields: host,ip,port,protocol,lastupdatetime
+```
+```shell
+$ fofa search -customFields custom 'port=6379'
 2024/08/23 12:09:08 query fofa of: port=6379
 168.119.197.62:6379,168.119.197.62,6379,redis,2024-08-23 12:00:00
 119.45.170.222:6379,119.45.170.222,6379,redis,2024-08-23 12:00:00
@@ -582,27 +609,28 @@ $ fofa --version
 
 ### search
 
-| 参数        | 参数简写 | 默认值  | 简介                                              |
-| ----------- | -------- | ------- | ------------------------------------------------- |
-| fields      | f        | ip,port | FOFA返回的字段选择，[了解更多](https://fofa.info/api) |                             
-| format      |          | csv     | 输出格式，可以为csv/json/xml                      |
-| outFile     | o        |         | 输出文件，如果不设置则终端打印                    |
-| size        | s        | 100     | 查询数量，最大为10000，受deductMode参数限制       |
-| deductMode  |          |         | 消费f点数，不设置则读取用户最大免费数量           |
-| fixUrl      |          | false   | 是否组合url，例如1.1.1.1,80组合为http://1.1.1.1   |
-| urlPrefix   |          | http:// | url前缀                                           |
-| full        |          | false   | 是否调取全量数据                                  |
-| uniqByIP    |          | false   | 是否根据ip去重                                    |
-| workers     |          | 10      | 线程数量                                          |
-| rate        |          | 2       | 每秒查询次数                                      |
-| template    |          | ip={}   | 从管道获取输入，输入的内容会替换{}                |
-| inFile      | i        |         | 输入文件，如果不设置则读取管道输入                |
-| checkActive |          | -1      | 探活复测次数，-1为不使用探活                      |
-| deWildcard  |          | -1      | 泛解析去重，-1为不使用泛解析去重                  |
-| filter      |          |         | 数据过滤规则，例如port<100 || host=="baidu.com" |
-| dedupHost   |          | false   | subdomain去重                                     |
-| headline    |          | false   | 是否输出csv头，只有在format为csv时可用            |
-| help        | h        | false   | 使用方法                                          |
+| 参数        | 参数简写 | 默认值     | 简介                                              |
+| ----------- |------|---------| ------------------------------------------------- |
+| fields      | f    | ip,port | FOFA返回的字段选择，[了解更多](https://fofa.info/api) |                             
+| format      |      | csv     | 输出格式，可以为csv/json/xml                      |
+| outFile     | o    |         | 输出文件，如果不设置则终端打印                    |
+| size        | s    | 100     | 查询数量，最大为10000，受deductMode参数限制       |
+| deductMode  |      |         | 消费f点数，不设置则读取用户最大免费数量           |
+| fixUrl      |      | false   | 是否组合url，例如1.1.1.1,80组合为http://1.1.1.1   |
+| urlPrefix   |      | http:// | url前缀                                           |
+| full        |      | false   | 是否调取全量数据                                  |
+| uniqByIP    |      | false   | 是否根据ip去重                                    |
+| workers     |      | 10      | 线程数量                                          |
+| rate        |      | 2       | 每秒查询次数                                      |
+| template    |      | ip={}   | 从管道获取输入，输入的内容会替换{}                |
+| inFile      | i    |         | 输入文件，如果不设置则读取管道输入                |
+| checkActive |      | -1      | 探活复测次数，-1为不使用探活                      |
+| deWildcard  |      | -1      | 泛解析去重，-1为不使用泛解析去重                  |
+| filter      |      |         | 数据过滤规则，例如port<100 || host=="baidu.com" |
+| dedupHost   |      | false   | subdomain去重                                     |
+| headline    |      | false   | 是否输出csv头，只有在format为csv时可用            |
+| customFields | cf   |         | 使用自定义fields字段    |
+| help        | h    | false   | 使用方法                                          |
 
 ### dump
 
@@ -618,6 +646,7 @@ $ fofa --version
 | full      |          | false   | 是否调取全量数据                                      |
 | batchSize | bs       | 1000    | 每次拉取多少条数据                                    |
 | batchType | bt       |         | 批量查询，可以为ip/domain                             |
+| customFields | cf   |         | 使用自定义fields字段    |
 | help      | h        | false   | 使用方法                                              |
 
 ### jsRender
@@ -689,16 +718,17 @@ $ fofa --version
 
 ### stats
 
-| 参数   | 参数简写 | 默认值        | 简介                                                  |
-| ------ | -------- | ------------- | ----------------------------------------------------- |
+| 参数   | 参数简写 | 默认值           | 简介                                                  |
+| ------ | -------- |---------------| ----------------------------------------------------- |
 | fields | f        | title,country | FOFA返回的字段选择，[了解更多](https://fofa.info/api) |
 | size   | s        | 5             | 查询次数，-1表示永远不停                              |
+| customFields | cf   |               | 使用自定义fields字段    |
 | help   | h        | false         | 使用方法                                              |
 
 ### random
 
-| 参数      | 参数简写 | 默认值                                          | 简介                                                  |
-| --------- | -------- | ----------------------------------------------- | ----------------------------------------------------- |
+| 参数      | 参数简写 | 默认值                                             | 简介                                                  |
+| --------- | -------- |-------------------------------------------------| ----------------------------------------------------- |
 | fields    | f        | ip,port,host,header,title,server,lastupdatetime | FOFA返回的字段选择，[了解更多](https://fofa.info/api) |
 | format    |          | json                                            | 输出格式，可以为csv/json/xml                          |
 | size      | s        | 1                                               | 查询次数，-1表示永远不停                              |
@@ -706,6 +736,7 @@ $ fofa --version
 | fixUrl    |          | false                                           | 是否组合url，例如1.1.1.1,80组合为http://1.1.1.1       |
 | urlPrefix |          | http://                                         | url前缀                                               |
 | full      |          | false                                           | 是否调取全量数据                                      |
+| customFields | cf   |                                                 | 使用自定义fields字段    |
 | help      | h        | false                                           | 使用方法                                              |
 
 ### count

@@ -1,6 +1,10 @@
-## v0.2.27 add multiple fields to remove duplicates in dedup mode
+## v0.2.27 add multiple fields to remove duplicates in dedup mode and custom fields
 
 -   dedup of multiple fields to remove duplicates use as: ```fofa dedup -d host,port,ip,protocol -i input.csv -o output.csv```
+-   search of custom fields use as: ```fofa search -cf custom port=80```
+-   dump of custom fields use as: ```fofa dump -cf custom port=80```
+-   random of custom fields use as: ```fofa random -cf custom```
+-   stats of custom fields use as: ```fofa stats -cf custom port=80```
 
 ## v0.2.26 update jsRender mode and headline in dump mode
 

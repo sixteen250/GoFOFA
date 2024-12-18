@@ -67,6 +67,13 @@ var randomCmd = &cli.Command{
 			Usage:       "search result for over a year",
 			Destination: &full,
 		},
+		&cli.StringFlag{
+			Name:        "customFields",
+			Aliases:     []string{"cf"},
+			Value:       "",
+			Usage:       "use custom fields",
+			Destination: &customFields,
+		},
 	},
 	Action: randomAction,
 }
@@ -77,6 +84,14 @@ func randomAction(ctx *cli.Context) error {
 	query := ctx.Args().First()
 	if len(query) == 0 {
 		query = "type=subdomain"
+	}
+
+	var err error
+	if customFields != "" {
+		fieldString, err = getCustomFields(customFields)
+		if err != nil {
+			return fmt.Errorf("get custom fields error, %v", err)
+		}
 	}
 
 	fields := strings.Split(fieldString, ",")

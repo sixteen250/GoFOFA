@@ -45,41 +45,50 @@ $ go install github.com/FofaInfo/GoFOFA/cmd/fofa@latest
 
 ```shell
 $ fofa
-NAME:
-   fofa - fofa client on Go v0.2.26, commit none, built at unknown
+fofa - fofa client on Go v0.2.27, commit none, built at unknown
 
-USAGE:
-   fofa [global options] command [command options] [arguments...]
+   ██████╗  ██████╗ ███████╗ ██████╗ ███████╗ █████╗ 
+  ██╔════╝ ██╔═══██╗██╔════╝██╔═══██╗██╔════╝██╔══██╗
+  ██║  ███╗██║   ██║█████╗  ██║   ██║█████╗  ███████║
+  ██║   ██║██║   ██║██╔══╝  ██║   ██║██╔══╝  ██╔══██║
+  ╚██████╔╝╚██████╔╝██║     ╚██████╔╝██║     ██║  ██║
+   ╚═════╝  ╚═════╝ ╚═╝      ╚═════╝ ╚═╝     ╚═╝  ╚═╝
+                                           v0.2.27
+                   https://github.com/FofaInfo/GoFOFA
 
-VERSION:
-   v0.2.26
+Usage:
+  fofa [global options] command [command options] [arguments...]
 
-AUTHOR:
-   LubyRuffy <lubyruffy@gmail.com>
-   Y13ze <y13ze@outlook.com>
+Commands:
+  search    fofa host search
+  account   fofa account information
+  count     fofa query results count
+  stats     fofa stats
+  icon      fofa icon search
+  random    fofa random data generator
+  host      fofa host
+  dump      fofa dump data
+  domains   extend domains from a domain
+  active    website active
+  dedup     remove duplicate tool
+  category  classify data according to config
+  jsRender  website js render
+  help, h   Shows a list of commands or help for one command
 
-COMMANDS:
-   search   fofa host search
-   account  fofa account information
-   count    fofa query results count
-   stats    fofa stats
-   icon     fofa icon search
-   random   fofa random data generator
-   host     fofa host
-   dump     fofa dump data
-   domains  extend domains from a domain
-   active   website active
-   dedup    remove duplicate tool
-   category  classify data according to config
-   jsRender  website js render
-   help, h  Shows a list of commands or help for one command
+Global Options:
+  --fofaURL value, -u value  format: <url>/?email=&key=<key>&version=<v2> (default: "https://fofa.info/?email=&key=your_key&version=v1")
+  --verbose                  print more information (default: false)
+  --accountDebug             print account in error log (default: false)
+  --help, -h                 show help (default: false)
+  --version, -v              print the version (default: false)
 
-GLOBAL OPTIONS:
-   --fofaURL value, -u value  format: <url>/?email=&key=<key>&version=<v2> (default: "https://fofa.info/?key=your_key&version=v1")
-   --verbose                  print more information (default: false)
-   --accountDebug             print account in error log (default: false)
-   --help, -h                 show help (default: false)
-   --version, -v              print the version (default: false)
+Authors:
+  LubyRuffy <lubyruffy@gmail.com>
+  Y13ze <y13ze@outlook.com>
+
+Examples:
+  fofa search -s 1 "ip=1.1.1.1"
+  fofa --help
 ```
 
 - Configure environment variables:
@@ -131,6 +140,24 @@ $ fofa search -fields host,ip,port,protocol,lastupdatetime 'port=6379'
 119.45.170.222:6379,119.45.170.222,6379,redis,2024-08-23 12:00:00
 112.126.87.29:6379,112.126.87.29,6379,unknown,2024-08-23 12:00:00
 121.43.116.245:6379,121.43.116.245,6379,unknown,2024-08-23 12:00:00
+```
+
+You can also choose custom fields by adding a configuration like the following to the `config.yaml` file. After that, use the `-customFields` option to select custom fields.
+This command supports shorthand mode, and both `-customFields` and `-cf` can be used interchangeably.
+```shell
+custom_fields:
+  - name: custom
+    fields: host,ip,port,protocol,lastupdatetime
+```
+```shell
+$ fofa search -customFields custom 'port=6379'
+2024/08/23 12:09:08 query fofa of: port=6379
+168.119.197.62:6379,168.119.197.62,6379,redis,2024-08-23 12:00:00
+119.45.170.222:6379,119.45.170.222,6379,redis,2024-08-23 12:00:00
+112.126.87.29:6379,112.126.87.29,6379,unknown,2024-08-23 12:00:00
+121.43.116.245:6379,121.43.116.245,6379,unknown,2024-08-23 12:00:00
+......
+......
 ```
 
 **Result Count:** Use the `-size` parameter to set the number of results per query. The default is 100. Both `-size` and its shorthand `-s` can be used.
@@ -608,6 +635,7 @@ $ fofa --version
 | filter       |              |               | Data filtering rules (e.g., `port<100 || host=="baidu.com"`) |
 | dedupHost    |              | false         | Removes duplicates for subdomains                       |
 | headline     |              | false         | Outputs CSV headers (only applicable for CSV format)    |
+| customFields | cf           |               | use custom fields    |
 | help         | h            | false         | Displays usage instructions                              |
 
 ### Dump
@@ -624,6 +652,7 @@ $ fofa --version
 | full         |              | false         | Retrieves full data                                      |
 | batchSize    | bs           | 1000          | Number of records fetched per batch                     |
 | batchType    | bt           |               | Batch query type: ip/domain                             |
+| customFields | cf           |               | use custom fields    |
 | help         | h            | false         | Displays usage instructions                              |
 
 ### jsRender
@@ -699,6 +728,7 @@ $ fofa --version
 |--------------|--------------|---------------|----------------------------------------------------------|
 | fields       | f            | title,country | FOFA fields to retrieve. [Learn More](https://fofa.info/api) |
 | size         | s            | 5             | Number of queries. `-1` for infinite queries             |
+| customFields | cf           |               | use custom fields    |
 | help         | h            | false         | Displays usage instructions                              |
 
 ### Random
@@ -712,6 +742,7 @@ $ fofa --version
 | fixUrl       |              | false                               | Concatenates URLs (e.g., `1.1.1.1,80` → `http://1.1.1.1`) |
 | urlPrefix    |              | http://                             | URL prefix                                               |
 | full         |              | false                               | Retrieves full data                                      |
+| customFields | cf           |               | use custom fields    |
 | help         | h            | false                               | Displays usage instructions                              |
 
 ### Count

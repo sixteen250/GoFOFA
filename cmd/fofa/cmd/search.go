@@ -38,6 +38,7 @@ var (
 	filter        string // filter data by rules
 	dedupHost     bool   // deduplicate by host
 	headline      bool   // add headline for csv
+	customFields  string // use custom fields
 )
 
 // search subcommand
@@ -156,8 +157,31 @@ var searchCmd = &cli.Command{
 			Usage:       "add headline for csv",
 			Destination: &headline,
 		},
+		&cli.StringFlag{
+			Name:        "customFields",
+			Aliases:     []string{"cf"},
+			Value:       "",
+			Usage:       "use custom fields",
+			Destination: &customFields,
+		},
 	},
 	Action: SearchAction,
+}
+
+func getCustomFields(fieldName string) (string, error) {
+	config, err := gofofa.LoadConfig(ConfigFileName)
+	if err != nil {
+		return "", err
+	}
+	if config == nil {
+		return "", errors.New("config is nil")
+	}
+	for _, field := range config.CustomFields {
+		if field.Name == fieldName {
+			return field.Fields, nil
+		}
+	}
+	return "", errors.New("field not found")
 }
 
 func fieldIndex(fields []string, fieldName string) int {
@@ -236,6 +260,14 @@ func SearchAction(ctx *cli.Context) error {
 		}
 	}
 
+	var err error
+	if customFields != "" {
+		fieldString, err = getCustomFields(customFields)
+		if err != nil {
+			return fmt.Errorf("get custom fields error, %v", err)
+		}
+	}
+
 	fields := strings.Split(fieldString, ",")
 	if len(fields) == 0 {
 		return errors.New("fofa fields cannot be empty")
@@ -260,7 +292,6 @@ func SearchAction(ctx *cli.Context) error {
 	var outTo io.Writer
 	if len(outFile) > 0 {
 		var f *os.File
-		var err error
 		if f, err = os.Create(outFile); err != nil {
 			return fmt.Errorf("create outFile %s failed: %w", outFile, err)
 		}

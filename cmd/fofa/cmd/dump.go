@@ -105,6 +105,13 @@ var dumpCmd = &cli.Command{
 			Usage:       "add headline for csv",
 			Destination: &headline,
 		},
+		&cli.StringFlag{
+			Name:        "customFields",
+			Aliases:     []string{"cf"},
+			Value:       "",
+			Usage:       "use custom fields",
+			Destination: &customFields,
+		},
 	},
 	Action: DumpAction,
 }
@@ -169,6 +176,15 @@ func DumpAction(ctx *cli.Context) error {
 	if len(queries) == 0 {
 		return errors.New("fofa query cannot be empty, use args or -inFile")
 	}
+
+	var err error
+	if customFields != "" {
+		fieldString, err = getCustomFields(customFields)
+		if err != nil {
+			return fmt.Errorf("get custom fields error, %v", err)
+		}
+	}
+
 	fields := strings.Split(fieldString, ",")
 	if len(fields) == 0 {
 		return errors.New("fofa fields cannot be empty")
@@ -194,7 +210,6 @@ func DumpAction(ctx *cli.Context) error {
 	var outTo io.Writer
 	if len(outFile) > 0 {
 		var f *os.File
-		var err error
 		if f, err = os.Create(outFile); err != nil {
 			return fmt.Errorf("create outFile %s failed: %w", outFile, err)
 		}
