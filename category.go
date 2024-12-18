@@ -24,6 +24,15 @@ type CategoryOptions struct {
 	TargetField  string // target field
 }
 
+type Cate struct {
+	Name    string   `yaml:"name"`
+	Filters []string `yaml:"filters"`
+}
+
+type CateConfig struct {
+	Categories []Cate `yaml:"categories"`
+}
+
 func evaluateExpressions(filters []string, data readformats.CSVRow) (bool, error) {
 	// 处理数据
 	env := make(map[string]interface{})
@@ -61,8 +70,9 @@ func Category(configFile, inputFile string, options ...CategoryOptions) (string,
 		unique = options[0].Unique
 	}
 
-	yamlReader := readformats.NewYAMLReader(configFile)
-	config, err := yamlReader.ReadFile()
+	reader := readformats.NewYAMLReader(configFile)
+	var config CateConfig
+	err := reader.UnmarshalFile(&config)
 	if err != nil {
 		return "", fmt.Errorf("error reading YAML file: %v", err)
 	}

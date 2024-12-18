@@ -15,23 +15,14 @@ type YAMLReader struct {
 	Filename string
 }
 
-type Category struct {
-	Name    string   `yaml:"name"`
-	Filters []string `yaml:"filters"`
-}
-
-type Config struct {
-	Categories []Category `yaml:"categories"`
-}
-
 func NewYAMLReader(filename string) *YAMLReader {
 	return &YAMLReader{Filename: filename}
 }
 
-func (y *YAMLReader) ReadLines() ([]byte, error) {
+func (y *YAMLReader) ReadFile() ([]byte, error) {
 	file, err := os.Open(y.Filename)
 	if err != nil {
-		return nil, fmt.Errorf("error opening file: %v", err)
+		return nil, fmt.Errorf("failed to open file %q: %v", y.Filename, err)
 	}
 	defer file.Close()
 
@@ -53,16 +44,14 @@ func (y *YAMLReader) ReadLines() ([]byte, error) {
 	return buffer.Bytes(), nil
 }
 
-func (y *YAMLReader) ReadFile() (Config, error) {
-	data, err := y.ReadLines()
+func (y *YAMLReader) UnmarshalFile(target interface{}) error {
+	data, err := y.ReadFile()
 	if err != nil {
-		return Config{}, fmt.Errorf("failed to read file: %v", err)
+		return err
 	}
 
-	var config Config
-	if err = yaml.Unmarshal(data, &config); err != nil {
-		return Config{}, fmt.Errorf("failed to unmarshal yaml: %v", err)
+	if err := yaml.Unmarshal(data, target); err != nil {
+		return fmt.Errorf("failed to unmarshal YAML file %q: %v", y.Filename, err)
 	}
-
-	return config, nil
+	return nil
 }
