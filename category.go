@@ -12,25 +12,11 @@ import (
 	"time"
 )
 
-type DataCategory struct {
-	Type   string
-	Record []string
-}
-
 type CategoryOptions struct {
 	Unique       bool   // is the classification unique
 	RelationFile string // relation file
 	SourceField  string // source field
 	TargetField  string // target field
-}
-
-type Cate struct {
-	Name    string   `yaml:"name"`
-	Filters []string `yaml:"filters"`
-}
-
-type CateConfig struct {
-	Categories []Cate `yaml:"categories"`
 }
 
 func evaluateExpressions(filters []string, data readformats.CSVRow) (bool, error) {
@@ -70,11 +56,9 @@ func Category(configFile, inputFile string, options ...CategoryOptions) (string,
 		unique = options[0].Unique
 	}
 
-	reader := readformats.NewYAMLReader(configFile)
-	var config CateConfig
-	err := reader.UnmarshalFile(&config)
+	config, err := LoadConfig(configFile)
 	if err != nil {
-		return "", fmt.Errorf("error reading YAML file: %v", err)
+		return "", err
 	}
 
 	// 打开 CSV 文件进行读取

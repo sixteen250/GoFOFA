@@ -50,7 +50,7 @@ func (y *YAMLReader) UnmarshalFile(target interface{}) error {
 		return err
 	}
 
-	if err := yaml.Unmarshal(data, target); err != nil {
+	if err = yaml.Unmarshal(data, target); err != nil {
 		return fmt.Errorf("failed to unmarshal YAML file %q: %v", y.Filename, err)
 	}
 	return nil

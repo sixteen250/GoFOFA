@@ -49,14 +49,13 @@ func TestCategory(t *testing.T) {
 	// 错误检测
 	_, err = Category("dsfhdksajfhsdkjfh", tmpCSVFile.Name(), CategoryOptions{})
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "error reading YAML file")
+	assert.Contains(t, err.Error(), "read Config file failed")
 
 	_, err = Category(tmpYAMLFile.Name(), "dsfhdksajfhsdkjfh", CategoryOptions{})
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "error opening CSV file")
 
-	s, err := Category(errYAMLFile.Name(), tmpCSVFile.Name(), CategoryOptions{})
-	fmt.Println(err, s)
+	_, err = Category(errYAMLFile.Name(), tmpCSVFile.Name(), CategoryOptions{})
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "error creating output file")
 

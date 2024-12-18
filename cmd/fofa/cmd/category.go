@@ -67,7 +67,7 @@ func categoryAction(ctx *cli.Context) error {
 
 	// 检测config文件内容是否合规
 	yamlReader := readformats.NewYAMLReader(ConfigFileName)
-	var config gofofa.CateConfig
+	var config gofofa.Config
 	err = yamlReader.UnmarshalFile(&config)
 	if err != nil {
 		return fmt.Errorf("error reading YAML file: %v", err)
