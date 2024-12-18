@@ -18,6 +18,35 @@ var (
 )
 
 func main() {
+
+	cli.AppHelpTemplate = `
+{{.Name}} - {{.Usage}}
+
+   ██████╗  ██████╗ ███████╗ ██████╗ ███████╗ █████╗ 
+  ██╔════╝ ██╔═══██╗██╔════╝██╔═══██╗██╔════╝██╔══██╗
+  ██║  ███╗██║   ██║█████╗  ██║   ██║█████╗  ███████║
+  ██║   ██║██║   ██║██╔══╝  ██║   ██║██╔══╝  ██╔══██║
+  ╚██████╔╝╚██████╔╝██║     ╚██████╔╝██║     ██║  ██║
+   ╚═════╝  ╚═════╝ ╚═╝      ╚═════╝ ╚═╝     ╚═╝  ╚═╝
+                                           {{.Version}}
+                   https://github.com/FofaInfo/GoFOFA
+
+Usage:
+  {{.HelpName}} [global options] command [command options] [arguments...]
+{{if .Commands}}
+Commands:
+{{range .Commands}}  {{join .Names ", "}}{{ "\t" }}{{.Usage}}
+{{end}}{{end}}{{if .VisibleFlags}}
+Global Options:
+{{range .VisibleFlags}}  {{.}}
+{{end}}{{end}}
+Authors:
+{{range .Authors}}  {{.Name}}{{with .Email}} <{{.}}>{{end}}
+{{end}}
+Examples:
+  {{.HelpName}} search -s 1 "ip=1.1.1.1"
+  {{.HelpName}} --help
+`
 	app := &cli.App{
 		Name:                   "fofa",
 		Usage:                  fmt.Sprintf("fofa client on Go %s, commit %s, built at %s", version, commit, date),
