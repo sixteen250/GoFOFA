@@ -79,19 +79,19 @@ func TestWorkerBrowser_Run(t *testing.T) {
 	defer ts.Close()
 
 	// 错误url情况
-	b := NewWorkerBrowser("")
+	b := NewWorkerBrowser("", 3)
 	body, err := b.Run()
 	assert.NotNil(t, err)
 	assert.Nil(t, body["body"])
 
 	// 常规js渲染
-	b = NewWorkerBrowser(ts.URL + "/js/normal")
+	b = NewWorkerBrowser(ts.URL+"/js/normal", 3)
 	body, err = b.Run()
 	assert.Nil(t, err)
 	assert.Equal(t, "Updated Title", body["title"])
 
 	// 页面跳转
-	b = NewWorkerBrowser(ts.URL + "/js/redirect")
+	b = NewWorkerBrowser(ts.URL+"/js/redirect", 3)
 	body, err = b.Run()
 	assert.Nil(t, err)
 	assert.Equal(t, "Successfully Title", body["title"])
