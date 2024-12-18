@@ -40,7 +40,7 @@ builds:
       - "-X 'main.version={{.Version}}'"
       - "-X 'main.commit={{.Commit}}'"
       - "-X 'main.date={{.Date}}'"
-      - "-X 'main.builtBy={{.User}}'"
+      - "-X 'main.builtBy={{.Env.USER}}'"
 checksum:
   name_template: 'checksums.txt'
 snapshot:
