@@ -1,6 +1,6 @@
 ## v0.2.28 fix dedup mode
 
--   fix dedup of multiple fields
+-   fix dedup of multiple fields to remove duplicates
 
 ## v0.2.27 add multiple fields to remove duplicates in dedup mode and custom fields
 
