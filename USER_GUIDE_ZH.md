@@ -30,7 +30,7 @@
 
 ### 其他
 
-- [Gofa版本号](#其他)
+- [GoFOFA版本号](#GoFOFA-版本)
 - [GoFOFA所有参数示例](#GoFOFA所有参数示例)
 
 ## 配置
@@ -45,7 +45,7 @@ $ go install github.com/FofaInfo/GoFOFA/cmd/fofa@latest
 
 ```shell
 $ fofa
-fofa - fofa client on Go v0.2.27, commit none, built at unknown
+fofa - fofa client on Go v0.2.28, commit none, built at unknown
 
    ██████╗  ██████╗ ███████╗ ██████╗ ███████╗ █████╗ 
   ██╔════╝ ██╔═══██╗██╔════╝██╔═══██╗██╔════╝██╔══██╗
@@ -53,7 +53,7 @@ fofa - fofa client on Go v0.2.27, commit none, built at unknown
   ██║   ██║██║   ██║██╔══╝  ██║   ██║██╔══╝  ██╔══██║
   ╚██████╔╝╚██████╔╝██║     ╚██████╔╝██║     ██║  ██║
    ╚═════╝  ╚═════╝ ╚═╝      ╚═════╝ ╚═╝     ╚═╝  ╚═╝
-                                           v0.2.27
+                                           v0.2.28
                    https://github.com/FofaInfo/GoFOFA
 
 Usage:
@@ -597,6 +597,8 @@ $ fofa category -input input.csv [-output category.csv]
 ```
 
 ### 其他
+
+#### GoFOFA 版本
 
 获取gofofa版本号
 

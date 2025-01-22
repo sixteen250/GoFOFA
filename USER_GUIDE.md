@@ -29,8 +29,8 @@ Note: Certain data processing functions require specific fields; ensure the requ
 
 ### Other Features
 
-- [Gofofa Version](#Other-Features)
-- [GoFOFA Parameter list](#GoFOFA-Parameter-list)
+- [GoFOFA Version](#gofofa-version)
+- [GoFOFA Parameter list](#gofofa-all-parameter-list)
 
 
 ## Configuration
@@ -45,7 +45,7 @@ $ go install github.com/FofaInfo/GoFOFA/cmd/fofa@latest
 
 ```shell
 $ fofa
-fofa - fofa client on Go v0.2.27, commit none, built at unknown
+fofa - fofa client on Go v0.2.28, commit none, built at unknown
 
    ██████╗  ██████╗ ███████╗ ██████╗ ███████╗ █████╗ 
   ██╔════╝ ██╔═══██╗██╔════╝██╔═══██╗██╔════╝██╔══██╗
@@ -53,7 +53,7 @@ fofa - fofa client on Go v0.2.27, commit none, built at unknown
   ██║   ██║██║   ██║██╔══╝  ██║   ██║██╔══╝  ██╔══██║
   ╚██████╔╝╚██████╔╝██║     ╚██████╔╝██║     ██║  ██║
    ╚═════╝  ╚═════╝ ╚═╝      ╚═════╝ ╚═╝     ╚═╝  ╚═╝
-                                           v0.2.27
+                                           v0.2.28
                    https://github.com/FofaInfo/GoFOFA
 
 Usage:

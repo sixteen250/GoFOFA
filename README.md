@@ -31,7 +31,7 @@ query fofa of: ip=1.1.1.1
 1.1.1.1,8880
 ```
 
-GoFOFA offers rich functionalities. For a complete user guide and installation instructions, [click here](https://github.com/FofaInfo/GoFOFA/blob/main/User_guide.md).
+GoFOFA offers rich functionalities. For a complete user guide and installation instructions, [click here](https://github.com/FofaInfo/GoFOFA/blob/main/USER_GUIDE.md).
 
 
 ## Key Features

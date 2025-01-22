@@ -95,7 +95,7 @@ func deduplicates(records [][]string, fields []string) ([][]string, error) {
 	}
 
 	// 获取字段索引
-	fieldIndexes := make([]int, 0, len(fields))
+	fieldIndexes := make([]int, 0)
 	for _, field := range fields {
 		index := indexOf(fields, field)
 		if index == -1 {
@@ -106,10 +106,10 @@ func deduplicates(records [][]string, fields []string) ([][]string, error) {
 
 	// 去重逻辑
 	seen := make(map[string]bool)
-	uniqueRows := [][]string{fields}
+	uniqueRows := [][]string{records[0]}
 
 	for _, row := range records[1:] {
-		keyParts := make([]string, len(fieldIndexes))
+		keyParts := make([]string, len(fields))
 		for i, idx := range fieldIndexes {
 			keyParts[i] = row[idx]
 		}
