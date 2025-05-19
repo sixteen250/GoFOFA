@@ -8,6 +8,7 @@
 
 - [Utility Features for Queries](#Utility-Features-for-Queries)
 	- [Batch Search (supports bulk queries via txt file upload)](#Batch-Search)
+ 	- [Support Pipeline Input](#Support-Pipeline-Input) 
 	- [Specify URL Concatenation](#URL-Concatenation)
 	- [Random Data Generation from FOFA](#Random-Data-Generation)
 	- [Certificate Line Expansion to Obtain Domains](#Certificate-Line-Expansion)
@@ -257,6 +258,20 @@ $ fofa dump -i ip.txt -bt ip -o dump.csv
 2024/11/25 17:39:06 dump data of query: ip=221.226.119.3 || ... || ip=221.226.6.2
 2024/11/25 17:39:12 size: 153/153, 100.00%
 ```
+
+#### Support Pipeline Input
+
+If you want to use pipeline data concatenation query statements, you can use the `-template` parameter, which defaults to `ip={}`:
+```shell
+$ fofa -f ip "is_ipv6=false && port=22" | fofa -f ip -uniqByIP -template "port=8443 && ip={}" 
+2025/05/19 17:15:00 query fofa of: is_ipv6=false && port=22
+2025/05/19 17:15:00 not set fofa query, now in pipeline mode....
+2025/05/19 17:15:02 query fofa of: port=8443 && ip=122.237.102.109
+2025/05/19 17:15:02 query fofa of: port=8443 && ip=122.239.3.6
+2025/05/19 17:15:02 query fofa of: port=8443 && ip=122.236.14.68
+......
+```
+
 
 #### URL Concatenation
 
