@@ -267,6 +267,20 @@ $ fofa dump -i ip.txt -bt ip -o dump.csv
 2024/11/25 17:39:12 size: 153/153, 100.00%
 ```
 
+#### 支持管道输入
+
+如果你想通过管道数据拼接查询语句，可以使用`-template`参数，默认是`ip={}`:
+```shell
+$ fofa -f ip "is_ipv6=false && port=22" | fofa -f ip -uniqByIP -template "port=8443 && ip={}" 
+2025/05/19 17:15:00 query fofa of: is_ipv6=false && port=22
+2025/05/19 17:15:00 not set fofa query, now in pipeline mode....
+2025/05/19 17:15:02 query fofa of: port=8443 && ip=122.237.102.109
+2025/05/19 17:15:02 query fofa of: port=8443 && ip=122.239.3.6
+2025/05/19 17:15:02 query fofa of: port=8443 && ip=122.236.14.68
+......
+```
+
+
 #### URL拼接
 
 1. 如果你想获取完整的url拼接，可以使用`fixUrl`参数:
