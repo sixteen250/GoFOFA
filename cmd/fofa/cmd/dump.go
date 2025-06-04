@@ -4,14 +4,15 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
-	"github.com/FofaInfo/GoFOFA"
-	"github.com/FofaInfo/GoFOFA/pkg/outformats"
-	"github.com/sirupsen/logrus"
-	"github.com/urfave/cli/v2"
 	"io"
 	"log"
 	"os"
 	"strings"
+
+	gofofa "github.com/FofaInfo/GoFOFA"
+	"github.com/FofaInfo/GoFOFA/pkg/outformats"
+	"github.com/sirupsen/logrus"
+	"github.com/urfave/cli/v2"
 )
 
 var (
@@ -86,6 +87,13 @@ var dumpCmd = &cli.Command{
 			Destination: &full,
 		},
 		&cli.IntFlag{
+			Name:        "batchCount",
+			Aliases:     []string{"bc"},
+			Value:       10,
+			Usage:       "the count of ip/domain to query in each batch",
+			Destination: &batchCount,
+		},
+		&cli.IntFlag{
 			Name:        "batchSize",
 			Aliases:     []string{"bs"},
 			Value:       1000,
@@ -122,7 +130,7 @@ func constructQuery(queryType string, queries []string) string {
 		if i > 0 {
 			queryBuilder.WriteString(" || ")
 		}
-		queryBuilder.WriteString(fmt.Sprintf("%s=%s", queryType, query))
+		queryBuilder.WriteString(fmt.Sprintf("%s==%s", queryType, query))
 	}
 	return queryBuilder.String()
 }
@@ -201,9 +209,17 @@ func DumpAction(ctx *cli.Context) error {
 	}
 
 	if batchType == "ip" {
-		queries = batchProcess(queries, IPMax, "ip")
+		if batchCount <= IPMax {
+			queries = batchProcess(queries, batchCount, "ip")
+		} else {
+			queries = batchProcess(queries, IPMax, "ip")
+		}
 	} else if batchType == "domain" {
-		queries = batchProcess(queries, DomainMax, "domain")
+		if batchCount <= DomainMax {
+			queries = batchProcess(queries, batchCount, "domain")
+		} else {
+			queries = batchProcess(queries, DomainMax, "domain")
+		}
 	}
 
 	// gen output

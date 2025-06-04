@@ -5,16 +5,17 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/FofaInfo/GoFOFA"
-	"github.com/FofaInfo/GoFOFA/pkg/outformats"
-	"github.com/sirupsen/logrus"
-	"github.com/urfave/cli/v2"
-	"golang.org/x/time/rate"
 	"io"
 	"log"
 	"os"
 	"strings"
 	"sync"
+
+	gofofa "github.com/FofaInfo/GoFOFA"
+	"github.com/FofaInfo/GoFOFA/pkg/outformats"
+	"github.com/sirupsen/logrus"
+	"github.com/urfave/cli/v2"
+	"golang.org/x/time/rate"
 )
 
 var (
@@ -28,6 +29,7 @@ var (
 	urlPrefix     string // each host fix as url, like 1.1.1.1,80 will change to http://1.1.1.1
 	full          bool   // search result for over a year
 	batchSize     int    // amount of data contained in each batch, only for dump
+	batchCount    int    // number of batches, only for dump
 	json          bool   // out format as json for short
 	uniqByIP      bool   // group by ip
 	workers       int    // number of workers
